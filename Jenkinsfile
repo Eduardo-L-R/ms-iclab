@@ -43,7 +43,7 @@ pipeline {
             }
         }
 
-/*
+
        stage('Análisis Sonarqube') {
             environment {
                 scannerHome = tool 'SonarScanner'
@@ -63,22 +63,22 @@ pipeline {
         }  
 
 
-*/
+
 
         stage('Jar Code') {
             steps {
                 sh './mvnw clean package -e'
             }
         }
-  /*      stage('Run Jar') {
+       stage('Run Jar') {
             steps {
                 sh 'nohup bash mvnw spring-boot:run &'
             }
         }
-*/
+
         stage ('Publish Nexus'){
             steps{
-                nexusPublisher nexusInstanceId: 'Nexus-1', nexusRepositoryId: 'devops-usach-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: '/build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]]
+                nexusPublisher nexusInstanceId: 'Nexus-1', nexusRepositoryId: 'devops-usach-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: './build/DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]]
              }
         }
         stage('Build Deploy Code') {
@@ -105,7 +105,7 @@ pipeline {
             setBuildStatus("Build failed", "FAILURE");
         } 
 
-     /*   always{
+        always{
             script{
                 BUILD_USER = getBuildUser()
             }
@@ -113,7 +113,7 @@ pipeline {
             slackSend channel:'#devops-equipo5',
                     color:COLOR_MAP[currentBuild.currentResult],
                     message: "*${currentBuild.currentResult}:* ${env.JOB_NAME} build ${env.BUILD_NUMBER} by ${BUILD_USER}"
-         }*/
+         }
     }
 }
 
