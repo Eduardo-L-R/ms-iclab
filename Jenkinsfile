@@ -75,6 +75,12 @@ pipeline {
                 sh 'nohup bash mvnw spring-boot:run &'
             }
         }
+
+        stage ('Publish Nexus'){
+            steps{
+                nexusPublisher nexusInstanceId: 'nexus-1', nexusRepositoryId: 'devops-usach-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '0.0.1']]]
+            }
+        }
         stage('Build Deploy Code') {
             when {
                 branch 'main'
