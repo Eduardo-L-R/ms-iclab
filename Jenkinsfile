@@ -43,7 +43,7 @@ pipeline {
             }
         }
 
-
+/*
        stage('Análisis Sonarqube') {
             environment {
                 scannerHome = tool 'SonarScanner'
@@ -63,7 +63,7 @@ pipeline {
         }  
 
 
-
+*/
 
         stage('Jar Code') {
             steps {
@@ -105,7 +105,7 @@ pipeline {
             setBuildStatus("Build failed", "FAILURE");
         } 
 
-        always{
+     /*   always{
             script{
                 BUILD_USER = getBuildUser()
             }
@@ -113,7 +113,7 @@ pipeline {
             slackSend channel:'#devops-equipo5',
                     color:COLOR_MAP[currentBuild.currentResult],
                     message: "*${currentBuild.currentResult}:* ${env.JOB_NAME} build ${env.BUILD_NUMBER} by ${BUILD_USER}"
-         }
+         }*/
     }
 }
 
