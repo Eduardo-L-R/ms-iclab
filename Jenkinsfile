@@ -43,7 +43,7 @@ pipeline {
             }
         }
 
-
+/*
        stage('Análisis Sonarqube') {
             environment {
                 scannerHome = tool 'SonarScanner'
@@ -61,7 +61,7 @@ pipeline {
                 waitForQualityGate abortPipeline: true
             }
         }  
-
+*/
 
 
 
@@ -70,11 +70,12 @@ pipeline {
                 sh './mvnw clean package -e'
             }
         }
-       stage('Run Jar') {
+       
+       /*stage('Run Jar') {
             steps {
                 sh 'nohup bash mvnw spring-boot:run &'
             }
-        }
+        }*/
 
         stage ('Publish Nexus'){
             steps{
