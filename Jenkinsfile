@@ -114,6 +114,9 @@ pipeline {
     post{
         success{
             setBuildStatus("Build succeeded", "SUCCESS");
+            gitHubPRStatus githubPRMessage('''${GITHUB_PR_COND_REF}
+                        run
+                        started''')
         }
 
         failure {
