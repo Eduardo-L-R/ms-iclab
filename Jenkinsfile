@@ -31,6 +31,7 @@ pipeline {
     environment{
         BUILD_USER = ''
     }
+    
     stages {
         stage('Compilación') {
             steps {
@@ -62,10 +63,7 @@ pipeline {
             }
         }  
 
-
-
-
-        stage('Jar Code') {
+        /*stage('Jar Code') {
             steps {
                 sh './mvnw clean package -e'
             }
@@ -88,8 +86,31 @@ pipeline {
                 echo "Deploying Code"
                 """
             }
+        }*/
+        stage ('Publish Nexus'){
+			when {
+				branch "main"
+			}
+            steps{
+                script {
+                    pom = readMavenPom file: "pom.xml";
+                    //filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
+                    //echo "*** aqui : ${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+                    //def file = ${pom.artifactId}-${pom.version}.${pom.packaging}
+                    echo "*** aqui : ;"//${pom.artifactId} ${pom.version} ${pom.packaging}"
+                    artifactPath = "./build/${pom.artifactId}-${pom.version}.${pom.packaging}";//filesByGlob[0].path;
+                    artifactExists = fileExists artifactPath;
+                    if(artifactExists) {
+                        echo "Artifact exists: ${artifactPath}";
+                         nexusPublisher nexusInstanceId: 'Nexus-1', nexusRepositoryId: 'devops-usach-nexus', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "${artifactPath}"]], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: pom.version]]]
+                    } else {
+                        echo "Artifact does not exist: ${artifactPath}";
+                    }
+                }
+            }
         }
     }
+
     post{
         success{
             setBuildStatus("Build succeeded", "SUCCESS");
@@ -104,9 +125,10 @@ pipeline {
                 BUILD_USER = getBuildUser()
             }
 
-            slackSend channel:'#devops-equipo5',
+            /*slackSend channel:'#devops-equipo5',
                     color:COLOR_MAP[currentBuild.currentResult],
                     message: "*${currentBuild.currentResult}:* ${env.JOB_NAME} build ${env.BUILD_NUMBER} by ${BUILD_USER}"
+                    */
          }
     }
 }
