@@ -32,13 +32,20 @@ pipeline {
         BUILD_USER = ''
     }
     stages {
-       stage('Merge') {
-            steps {
-                sh 'git --version'
-               // sh ' git merge feature-estado-mundial'
-               // sh ' git push'
+        stage('Git Push'){
+        steps{
+            script{
+               // GIT_CREDS = credentials(<git creds id>)
+                sh '''
+                    git checkout main
+                    git merge prueba-ambiente
+                    git push
+                '''
             }
         }
+        }        
+
+
         
         /*
         stage('Compilación') {
