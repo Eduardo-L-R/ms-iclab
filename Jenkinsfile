@@ -32,6 +32,15 @@ pipeline {
         BUILD_USER = ''
     }
     stages {
+       stage('Merge') {
+            steps {
+                sh 'git checkout main'
+                sh 'git merge feature-estado-mundial'
+                sh 'git push'
+            }
+        }
+        
+        /*
         stage('Compilación') {
             steps {
                 sh './mvnw clean compile -e'
@@ -96,6 +105,7 @@ pipeline {
                 """
             }
         }
+   */
     }
     post{
         success{
