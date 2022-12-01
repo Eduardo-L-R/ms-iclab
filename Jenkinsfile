@@ -34,9 +34,9 @@ pipeline {
     stages {
        stage('Merge') {
             steps {
-                sh 'git checkout main'
-                sh 'git merge feature-estado-mundial'
-                sh 'git push'
+                sh 'git --version'
+               // sh ' git merge feature-estado-mundial'
+               // sh ' git push'
             }
         }
         
